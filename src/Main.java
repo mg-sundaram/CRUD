@@ -44,6 +44,10 @@ public class Main {
 	                		services.class_taken(scanner);
 	                        System.out.println("=========================================================");
 	                		break;
+				default:
+	                            System.out.println("Invalid choice. Please enter a valid number.");
+	                            System.out.println("=========================================================");
+	                            break;
 	                	}
                 	break;
                 case 4:
@@ -61,7 +65,7 @@ public class Main {
                             System.out.println("=========================================================");
                 			break; 
                 		default:
-                            System.out.println("Invalid choice. Please enter a number.");
+                            System.out.println("Invalid choice. Please enter a valid number.");
                             System.out.println("=========================================================");
                             break;
                 	}	
@@ -81,7 +85,7 @@ public class Main {
                             System.out.println("=========================================================");
                 			break;
                 		default:
-                            System.out.println("Invalid choice. Please enter a number.");
+                            System.out.println("Invalid choice. Please enter a valid number.");
                             System.out.println("=========================================================");
                             break;
                 	}
@@ -94,15 +98,15 @@ public class Main {
                 	switch(l) {
                 		case 1:
                 			services.deletebyname(scanner);
-                            System.out.println("=========================================================");
+                            		System.out.println("=========================================================");
                 			break;
                 		case 2:
                 			services.deletebyid(scanner);
-                            System.out.println("=========================================================");
+                            		System.out.println("=========================================================");
                 			break;
                 		default:
-                            System.out.println("Invalid choice. Please enter a number.");
-                            break;
+                            		System.out.println("Invalid choice. Please enter a valid number.");
+                           		 break;
                 	}
                 	break;
                 case 7:
