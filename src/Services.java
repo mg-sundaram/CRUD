@@ -28,6 +28,7 @@ public class Services {
                 System.out.println("Age: " + resultSet.getInt("age"));
                 System.out.println("Date of Birth: " + resultSet.getDate("dob"));
                 System.out.println("Number of classes: " + resultSet.getInt("num_classes"));
+                System.out.println("Average Class Taken: " + resultSet.getDouble("average_class"));
                 // Display other relevant information
                 System.out.println();
             }
