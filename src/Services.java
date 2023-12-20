@@ -505,4 +505,25 @@ public class Services {
             e.printStackTrace();
         }
     }
+     public void displayAverageClasses() {
+        try {
+            Connection connection = dbConnector.getConnection();
+            String query = "SELECT AVG(num_classes) AS average_classes FROM teachers";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                double averageClasses = resultSet.getDouble("average_classes");
+                System.out.println("Average number of classes taken by teachers: " + averageClasses);
+            } else {
+                System.out.println("No records found.");
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
