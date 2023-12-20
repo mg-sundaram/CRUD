@@ -38,6 +38,44 @@ public class Services {
             e.printStackTrace();
         }
     }
+     public void addTeacher(Scanner scanner) {
+        try {
+            Connection connection = dbConnector.getConnection();
+
+            System.out.println("Enter teacher's full name:");
+            String fullName = scanner.nextLine();
+
+            System.out.println("Enter teacher's age:");
+            int age = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            System.out.println("Enter teacher's date of birth (YYYY-MM-DD):");
+            String dobString = scanner.nextLine();
+            Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobString);
+
+            System.out.println("Enter the number of classes the teacher teaches:");
+            int numClasses = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            String query = "INSERT INTO teachers (name, age, dob, num_classes) VALUES (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, fullName);
+            preparedStatement.setInt(2, age);
+            preparedStatement.setDate(3, new java.sql.Date(dob.getTime()));
+            preparedStatement.setInt(4, numClasses);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Teacher added successfully!");
+            } else {
+                System.out.println("Failed to add teacher.");
+            }
+
+            preparedStatement.close();
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
     public void age(Scanner scanner) {
         try {
             Connection connection = dbConnector.getConnection();
@@ -257,137 +295,7 @@ public class Services {
             e.printStackTrace();
         }
     }
-    public void deletebyid(Scanner scanner) {
-        try {
-            Connection connection = dbConnector.getConnection();
-            System.out.println("Enter Teacher's ID to delete: ");
-            int teacherId = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-
-            String query = "SELECT * FROM teachers WHERE teacher_id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, teacherId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("No records found for the entered ID. Please enter a valid ID.");
-            } else {
-                while (resultSet.next()) {
-                    // Display the existing details for confirmation
-                    System.out.println("Teacher ID: " + resultSet.getInt("teacher_id"));
-                    System.out.println("Name: " + resultSet.getString("name"));
-                    System.out.println("Age: " + resultSet.getInt("age"));
-                    System.out.println("Date of Birth: " + resultSet.getDate("dob"));
-                    System.out.println("Number of classes: " + resultSet.getInt("num_classes"));
-                    System.out.println();
-
-                    // Confirmation message
-                    System.out.println("Are you sure you want to delete this teacher? (Y/N)");
-                    String confirmDelete = scanner.nextLine();
-
-                    if (confirmDelete.equalsIgnoreCase("Y")) {
-                        // Another confirmation
-                        System.out.println("Please confirm the deletion by typing 'DELETE': ");
-                        String confirmText = scanner.nextLine();
-
-                        if (confirmText.equalsIgnoreCase("DELETE")) {
-                            // Delete query
-                            String deleteQuery = "DELETE FROM teachers WHERE teacher_id = ?";
-                            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
-                            deleteStatement.setInt(1, teacherId);
-
-                            int rowsAffected = deleteStatement.executeUpdate();
-
-                            if (rowsAffected > 0) {
-                                System.out.println("Teacher's details deleted successfully!");
-                            } else {
-                                System.out.println("Failed to delete teacher's details.");
-                            }
-
-                            deleteStatement.close();
-                        } else {
-                            System.out.println("Deletion canceled. Incorrect confirmation text.");
-                        }
-                    } else {
-                        System.out.println("Deletion canceled.");
-                    }
-                }
-            }
-
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deletebyname(Scanner scanner) {
-        try {
-            Connection connection = dbConnector.getConnection();
-            System.out.println("Enter Teacher's name to delete: ");
-            String name = scanner.nextLine();
-
-            String query = "SELECT * FROM teachers WHERE name = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, name);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("No records found for the entered name. Please enter a valid name.");
-            } else {
-                while (resultSet.next()) {
-                    int teacherId = resultSet.getInt("teacher_id");
-
-                    // Display the existing details for confirmation
-                    System.out.println("Teacher ID: " + resultSet.getInt("teacher_id"));
-                    System.out.println("Name: " + resultSet.getString("name"));
-                    System.out.println("Age: " + resultSet.getInt("age"));
-                    System.out.println("Date of Birth: " + resultSet.getDate("dob"));
-                    System.out.println("Number of classes: " + resultSet.getInt("num_classes"));
-                    System.out.println();
-
-                    // Confirmation message
-                    System.out.println("Are you sure you want to delete this teacher? (Y/N)");
-                    String confirmDelete = scanner.nextLine();
-
-                    if (confirmDelete.equalsIgnoreCase("Y")) {
-                        // Another confirmation
-                        System.out.println("Please confirm the deletion by typing 'DELETE': ");
-                        String confirmText = scanner.nextLine();
-
-                        if (confirmText.equalsIgnoreCase("DELETE")) {
-                            // Delete query
-                            String deleteQuery = "DELETE FROM teachers WHERE teacher_id = ?";
-                            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
-                            deleteStatement.setInt(1, teacherId);
-
-                            int rowsAffected = deleteStatement.executeUpdate();
-
-                            if (rowsAffected > 0) {
-                                System.out.println("Teacher's details deleted successfully!");
-                            } else {
-                                System.out.println("Failed to delete teacher's details.");
-                            }
-
-                            deleteStatement.close();
-                        } else {
-                            System.out.println("Deletion canceled. Incorrect confirmation text.");
-                        }
-                    } else {
-                        System.out.println("Deletion canceled.");
-                    }
-                }
-            }
-
-            resultSet.close();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public void updateteacherbyid(Scanner scanner) {
         try {
             Connection connection = dbConnector.getConnection();
@@ -467,42 +375,132 @@ public class Services {
             e.printStackTrace();
         }
     }
-
-    public void addTeacher(Scanner scanner) {
+     public void deletebyname(Scanner scanner) {
         try {
             Connection connection = dbConnector.getConnection();
+            System.out.println("Enter Teacher's name to delete: ");
+            String name = scanner.nextLine();
 
-            System.out.println("Enter teacher's full name:");
-            String fullName = scanner.nextLine();
-
-            System.out.println("Enter teacher's age:");
-            int age = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-
-            System.out.println("Enter teacher's date of birth (YYYY-MM-DD):");
-            String dobString = scanner.nextLine();
-            Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(dobString);
-
-            System.out.println("Enter the number of classes the teacher teaches:");
-            int numClasses = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-
-            String query = "INSERT INTO teachers (name, age, dob, num_classes) VALUES (?, ?, ?, ?)";
+            String query = "SELECT * FROM teachers WHERE name = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, fullName);
-            preparedStatement.setInt(2, age);
-            preparedStatement.setDate(3, new java.sql.Date(dob.getTime()));
-            preparedStatement.setInt(4, numClasses);
+            preparedStatement.setString(1, name);
 
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Teacher added successfully!");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                System.out.println("No records found for the entered name. Please enter a valid name.");
             } else {
-                System.out.println("Failed to add teacher.");
+                while (resultSet.next()) {
+                    int teacherId = resultSet.getInt("teacher_id");
+
+                    // Display the existing details for confirmation
+                    System.out.println("Teacher ID: " + resultSet.getInt("teacher_id"));
+                    System.out.println("Name: " + resultSet.getString("name"));
+                    System.out.println("Age: " + resultSet.getInt("age"));
+                    System.out.println("Date of Birth: " + resultSet.getDate("dob"));
+                    System.out.println("Number of classes: " + resultSet.getInt("num_classes"));
+                    System.out.println();
+
+                    // Confirmation message
+                    System.out.println("Are you sure you want to delete this teacher? (Y/N)");
+                    String confirmDelete = scanner.nextLine();
+
+                    if (confirmDelete.equalsIgnoreCase("Y")) {
+                        // Another confirmation
+                        System.out.println("Please confirm the deletion by typing 'DELETE': ");
+                        String confirmText = scanner.nextLine();
+
+                        if (confirmText.equalsIgnoreCase("DELETE")) {
+                            // Delete query
+                            String deleteQuery = "DELETE FROM teachers WHERE teacher_id = ?";
+                            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+                            deleteStatement.setInt(1, teacherId);
+
+                            int rowsAffected = deleteStatement.executeUpdate();
+
+                            if (rowsAffected > 0) {
+                                System.out.println("Teacher's details deleted successfully!");
+                            } else {
+                                System.out.println("Failed to delete teacher's details.");
+                            }
+
+                            deleteStatement.close();
+                        } else {
+                            System.out.println("Deletion canceled. Incorrect confirmation text.");
+                        }
+                    } else {
+                        System.out.println("Deletion canceled.");
+                    }
+                }
             }
 
+            resultSet.close();
             preparedStatement.close();
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void deletebyid(Scanner scanner) {
+        try {
+            Connection connection = dbConnector.getConnection();
+            System.out.println("Enter Teacher's ID to delete: ");
+            int teacherId = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            String query = "SELECT * FROM teachers WHERE teacher_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, teacherId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                System.out.println("No records found for the entered ID. Please enter a valid ID.");
+            } else {
+                while (resultSet.next()) {
+                    // Display the existing details for confirmation
+                    System.out.println("Teacher ID: " + resultSet.getInt("teacher_id"));
+                    System.out.println("Name: " + resultSet.getString("name"));
+                    System.out.println("Age: " + resultSet.getInt("age"));
+                    System.out.println("Date of Birth: " + resultSet.getDate("dob"));
+                    System.out.println("Number of classes: " + resultSet.getInt("num_classes"));
+                    System.out.println();
+
+                    // Confirmation message
+                    System.out.println("Are you sure you want to delete this teacher? (Y/N)");
+                    String confirmDelete = scanner.nextLine();
+
+                    if (confirmDelete.equalsIgnoreCase("Y")) {
+                        // Another confirmation
+                        System.out.println("Please confirm the deletion by typing 'DELETE': ");
+                        String confirmText = scanner.nextLine();
+
+                        if (confirmText.equalsIgnoreCase("DELETE")) {
+                            // Delete query
+                            String deleteQuery = "DELETE FROM teachers WHERE teacher_id = ?";
+                            PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery);
+                            deleteStatement.setInt(1, teacherId);
+
+                            int rowsAffected = deleteStatement.executeUpdate();
+
+                            if (rowsAffected > 0) {
+                                System.out.println("Teacher's details deleted successfully!");
+                            } else {
+                                System.out.println("Failed to delete teacher's details.");
+                            }
+
+                            deleteStatement.close();
+                        } else {
+                            System.out.println("Deletion canceled. Incorrect confirmation text.");
+                        }
+                    } else {
+                        System.out.println("Deletion canceled.");
+                    }
+                }
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
