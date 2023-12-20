@@ -15,11 +15,11 @@ public class Main {
             System.out.println("4. Search for a teacher");
             System.out.println("5. Update a teacher's record");
             System.out.println("6. Delete a teacher");
-            System.out.println("7. Exit");
+            System.out.println("7. Average Classes");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-
+            scanner.nextLine(); 
             switch (choice) {
                 case 1:
                     services.showAllTeachers();
@@ -106,6 +106,9 @@ public class Main {
                 	}
                 	break;
                 case 7:
+                	services.displayAverageClasses();
+                	break;
+                case 8:
                     System.out.println("Thank you! Have a great day :-)!");
                     exit = true;
                     break;
