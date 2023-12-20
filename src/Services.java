@@ -244,20 +244,24 @@ public class Services {
                     System.out.println();
 
                     // Prompt user for updated values
+                    System.out.println("Enter your new name: ");
+                    String s = scanner.nextLine();
                     System.out.println("Enter new age: ");
                     int newAge = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
 
                     System.out.println("Enter new date of birth (YYYY-MM-DD): ");
                     String newDOB = scanner.nextLine();
-
+                    System.out.println("Enter classes taken: ");
+                    int n = scanner.nextInt();
                     // Update query
-                    String updateQuery = "UPDATE teachers SET age = ?, dob = ? WHERE teacher_id = ?";
+                    String updateQuery = "UPDATE teachers SET name=?,age = ?, dob = ?, num_classes = ? WHERE teacher_id = ?";
                     PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                    updateStatement.setInt(1, newAge);
-                    updateStatement.setString(2, newDOB);
-                    updateStatement.setInt(3, teacherId);
-
+                    updateStatement.setString(1, s);
+                    updateStatement.setInt(2, newAge);
+                    updateStatement.setString(3, newDOB);
+                    updateStatement.setInt(4, n);
+                    updateStatement.setInt(5, teacherId);
                     int rowsAffected = updateStatement.executeUpdate();
 
                     if (rowsAffected > 0) {
@@ -324,19 +328,24 @@ public class Services {
                     System.out.println();
 
                     // Prompt user for updated values
+                    System.out.println("Enter your new name: ");
+                    String s = scanner.nextLine();
                     System.out.println("Enter new age: ");
                     int newAge = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
 
                     System.out.println("Enter new date of birth (YYYY-MM-DD): ");
                     String newDOB = scanner.nextLine();
-
+                    System.out.println("Enter classes taken: ");
+                    int n = scanner.nextInt();
                     // Update query
-                    String updateQuery = "UPDATE teachers SET age = ?, dob = ? WHERE teacher_id = ?";
+                    String updateQuery = "UPDATE teachers SET name=?,age = ?, dob = ?, num_classes = ? WHERE teacher_id = ?";
                     PreparedStatement updateStatement = connection.prepareStatement(updateQuery);
-                    updateStatement.setInt(1, newAge);
-                    updateStatement.setString(2, newDOB);
-                    updateStatement.setInt(3, teacherId);
+                    updateStatement.setString(1, s);
+                    updateStatement.setInt(2, newAge);
+                    updateStatement.setString(3, newDOB);
+                    updateStatement.setInt(4, n);
+                    updateStatement.setInt(5, teacherId);
 
                     int rowsAffected = updateStatement.executeUpdate();
 
